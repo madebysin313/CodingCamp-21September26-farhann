@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense &amp; Budget Visualizer</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="light">
+
+  <!-- Header -->
+  <header class="app-header">
+    <h1>Expense &amp; Budget Visualizer</h1>
+    <button id="themeToggle" class="btn-icon" aria-label="Toggle dark/light mode">🌙</button>
+  </header>
+
+  <main class="container">
+
+    <!-- Total Balance -->
+    <section class="card balance-card" aria-label="Total Balance">
+      <p class="balance-label">TOTAL BALANCE</p>
+      <p class="balance-amount" id="totalBalance">$0.00</p>
+    </section>
+
+    <!-- Spending Limit Alert -->
+    <div class="alert alert-hidden" id="spendingAlert" role="alert">
+      ⚠️ You've exceeded your spending limit of <span id="limitDisplay"></span>!
+    </div>
+
+    <!-- Add Transaction Form -->
+    <section class="card form-card">
+      <h2>Add Transaction</h2>
+      <form id="transactionForm" novalidate>
+
+        <div class="form-group">
+          <label for="itemName">Item Name</label>
+          <input type="text" id="itemName" placeholder="e.g. Coffee" autocomplete="off" />
+          <span class="field-error" id="itemNameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" placeholder="e.g. 5.00" min="0.01" step="0.01" />
+          <span class="field-error" id="amountError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="">-- Select category --</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Fun">Fun</option>
+            <!-- Custom categories rendered here by JS -->
+          </select>
+          <span class="field-error" id="categoryError"></span>
+        </div>
+
+        <!-- Custom category input (optional challenge) -->
+        <div class="form-group custom-category-group" id="customCategoryGroup" style="display:none;">
+          <label for="customCategory">New Category Name</label>
+          <input type="text" id="customCategory" placeholder="e.g. Health" />
+        </div>
+
+        <div class="form-group">
+          <label for="spendingLimit">Spending Limit (optional)</label>
+          <input type="number" id="spendingLimit" placeholder="e.g. 100.00" min="0" step="0.01" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Add Transaction</button>
+      </form>
+    </section>
+
+    <!-- Bottom grid: transaction list + chart -->
+    <div class="bottom-grid">
+
+      <!-- Transaction List -->
+      <section class="card list-card">
+        <div class="list-header">
+          <h2>Transactions</h2>
+          <div class="sort-controls">
+            <label for="sortSelect">Sort:</label>
+            <select id="sortSelect">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="amount-desc">Amount ↓</option>
+              <option value="amount-asc">Amount ↑</option>
+              <option value="category">Category</option>
+            </select>
+          </div>
+        </div>
+
+        <ul class="transaction-list" id="transactionList" aria-live="polite">
+          <li class="empty-state" id="emptyState">No transactions yet. Add one above!</li>
+        </ul>
+      </section>
+
+      <!-- Pie Chart -->
+      <section class="card chart-card">
+        <h2>Spending by Category</h2>
+        <div class="chart-wrapper">
+          <canvas id="spendingChart" aria-label="Pie chart of spending by category" role="img"></canvas>
+          <p class="chart-empty" id="chartEmpty">Add transactions to see the chart.</p>
+        </div>
+      </section>
+
+    </div><!-- /.bottom-grid -->
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
